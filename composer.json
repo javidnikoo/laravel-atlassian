@@ -15,6 +15,34 @@
     "illuminate/http": "^10.0 || ^11.0 || ^12.0",
     "illuminate/contracts": "^10.0 || ^11.0 || ^12.0"
   },
+  "require-dev": {
+    "orchestra/testbench": "^9.0 || ^10.0",
+    "phpunit/phpunit": "^10.5 || ^11.0",
+    "mockery/mockery": "^1.6",
+    "laravel/pint": "^1.17"
+  },
+  "autoload": {
+    "psr-4": {
+      "Javidnikoo\\LaravelAtlassian\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Javidnikoo\\LaravelAtlassian\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Javidnikoo\\LaravelAtlassian\\AtlassianServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "pint --test",
+    "format": "pint"
+  },
   "minimum-stability": "stable",
   "prefer-stable": true
 }
