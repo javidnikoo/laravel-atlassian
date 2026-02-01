@@ -4,9 +4,10 @@ namespace Javidnikoo\LaravelAtlassian\Jira\Clients;
 
 use Illuminate\Http\Client\PendingRequest;
 use Javidnikoo\LaravelAtlassian\Atlassian\Http\AtlassianHttpFactory;
+use Javidnikoo\LaravelAtlassian\Jira\Contracts\JiraClientInterface;
 use Javidnikoo\LaravelAtlassian\Jira\Exceptions\JiraException;
 
-class JiraClient
+class JiraClient implements JiraClientInterface
 {
     protected array $config;
 
