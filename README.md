@@ -1,10 +1,12 @@
 # Laravel Atlassian
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/javidnikoo/laravel-atlassian.svg?style=flat-square)](https://packagist.org/packages/javidnikoo/laravel-atlassian)
+[![CI](https://github.com/javidnikoo/laravel-atlassian/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/javidnikoo/laravel-atlassian/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
 Clean, modern Laravel package for **Confluence Cloud REST API v2** and **Jira Cloud REST API v3**.
 
-## Feature Checklist 
+## Feature Checklist
 
 ### Confluence Cloud (v2 API)
 
