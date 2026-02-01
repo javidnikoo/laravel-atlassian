@@ -67,6 +67,12 @@ Clean, modern Laravel package for **Confluence Cloud REST API v2** and **Jira Cl
 - [ ] Server Info - Instance info
 - [ ] Webhooks - Webhook registration
 
+## Coverage
+
+**HTML coverage report**:
+
+https://javidnikoo.github.io/laravel-atlassian/
+
 ## Installation
 
 ```bash
