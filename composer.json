@@ -1,0 +1,20 @@
+{
+  "name": "javidnikoo/laravel-atlassian",
+  "description": "Laravel package for Jira Cloud & Confluence Cloud (v3 & v2 APIs)",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mahdi Javidnikoo",
+      "email": "mahdi@javidnikoo.de"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^10.0 || ^11.0 || ^12.0",
+    "illuminate/http": "^10.0 || ^11.0 || ^12.0",
+    "illuminate/contracts": "^10.0 || ^11.0 || ^12.0"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
