@@ -1,0 +1,13 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    working_dir: /app
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      - COMPOSER_HOME=/tmp/composer
+      - XDG_CACHE_HOME=/tmp
+    volumes:
+      - ./:/app
+    command: sh -lc "composer install && tail -f /dev/null"
