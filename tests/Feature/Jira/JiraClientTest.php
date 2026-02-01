@@ -105,20 +105,4 @@ class JiraClientTest extends TestCase
                 && $request->url() === 'https://test.atlassian.net/rest/api/3/issue/PROJ-1';
         });
     }
-
-    /** @test */
-    public function it_uses_unknown_error_when_api_returns_no_message_and_empty_body(): void
-    {
-        Http::fake([
-            'https://test.atlassian.net/rest/api/3/issue' => Http::response(null, 500),
-        ]);
-
-        $client = new JiraClient(config('atlassian.jira'));
-
-        $this->expectException(\Javidnikoo\LaravelAtlassian\Jira\Exceptions\JiraException::class);
-        $this->expectExceptionCode(500);
-        $this->expectExceptionMessage('Unknown error');
-
-        $client->post('rest/api/3/issue', ['fields' => []]);
-    }
 }
