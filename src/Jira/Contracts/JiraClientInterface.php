@@ -2,7 +2,4 @@
 
 namespace Javidnikoo\LaravelAtlassian\Jira\Contracts;
 
-interface JiraClientInterface
-{
-
-}
+interface JiraClientInterface {}
