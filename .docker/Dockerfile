@@ -6,3 +6,6 @@ RUN apk add --no-cache git unzip zip bash
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
+
+RUN mkdir -p /home/app/.config/psysh \
+ && chown -R 1000:1000 /home/app

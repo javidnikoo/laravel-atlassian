@@ -6,8 +6,11 @@ services:
     working_dir: /app
     user: "${UID:-1000}:${GID:-1000}"
     environment:
-      - COMPOSER_HOME=/tmp/composer
-      - XDG_CACHE_HOME=/tmp
+      COMPOSER_HOME: /tmp/composer
+      XDG_CACHE_HOME: /tmp
+      HOME: /home/app
+      XDG_CONFIG_HOME: /home/app/.config
     volumes:
       - ./:/app
+      - ./.psysh:/home/app/.config/psysh
     command: sh -lc "composer install && tail -f /dev/null"
