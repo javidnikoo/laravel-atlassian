@@ -3,17 +3,14 @@
 namespace Javidnikoo\LaravelAtlassian\Tests\Feature\Jira;
 
 use Illuminate\Support\Facades\Http;
-use InvalidArgumentException;
-use Javidnikoo\LaravelAtlassian\Jira\Exceptions\JiraException;
 use Javidnikoo\LaravelAtlassian\Jira\Facades\Jira;
 use Javidnikoo\LaravelAtlassian\Jira\Features\Issue\Requests\IssueCreateRequest;
-use Javidnikoo\LaravelAtlassian\Jira\Features\Issue\Requests\IssueTransitionRequest;
 use Javidnikoo\LaravelAtlassian\Jira\Features\Issue\Requests\IssueUpdateRequest;
 use Javidnikoo\LaravelAtlassian\Tests\TestCase;
 
 class IssueResourceTest extends TestCase
 {
-    public function testItCreatesIssueSuccessfully()
+    public function test_it_creates_issue_successfully()
     {
         Http::fake([
             'https://test.atlassian.net/rest/api/3/issue' => Http::response([
@@ -41,7 +38,7 @@ class IssueResourceTest extends TestCase
         Http::assertSentCount(1);
     }
 
-    public function testUpdatesExistingIssue()
+    public function test_updates_existing_issue()
     {
         Http::fake([
             '*/rest/api/3/issue/PROJ-456' => Http::response([], 204),
