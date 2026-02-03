@@ -6,6 +6,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Javidnikoo\LaravelAtlassian\Atlassian\Http\AtlassianHttpFactory;
 use Javidnikoo\LaravelAtlassian\Jira\Contracts\JiraClientInterface;
 use Javidnikoo\LaravelAtlassian\Jira\Exceptions\JiraException;
+use Javidnikoo\LaravelAtlassian\Jira\Features\Issue\Resource\IssueResource;
 
 class JiraClient implements JiraClientInterface
 {
@@ -65,5 +66,10 @@ class JiraClient implements JiraClientInterface
     public function get(string $endpoint, array $query = []): array
     {
         return $this->http()->get($endpoint, $query)->json() ?? [];
+    }
+
+    public function issues(): IssueResource
+    {
+        return new IssueResource($this);
     }
 }
