@@ -15,9 +15,9 @@ final class AtlassianHttpFactory
             ->contentType('application/json')
             ->timeout((int) $config['timeout'])
             ->retry(
-                times: (int) ($config['retries'] ?? 3),
-                sleepMilliseconds: (int) ($config['retry_delay_ms'] ?? 1000),
-                when: fn ($e) => RetryDecider::shouldRetry($e)
+                (int) ($config['retries'] ?? 3),
+                (int) ($config['retry_delay_ms'] ?? 1000),
+                fn ($e) => RetryDecider::shouldRetry($e)
             );
     }
 }
