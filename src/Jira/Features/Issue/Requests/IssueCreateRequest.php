@@ -8,7 +8,9 @@ use Javidnikoo\LaravelAtlassian\Jira\Exceptions\JiraException;
 class IssueCreateRequest
 {
     protected array $fields = [];
+
     protected array $descriptionContent = [];
+
     public static function make(): static
     {
         return new static;
@@ -168,7 +170,7 @@ class IssueCreateRequest
     {
         $this->validate();
 
-        if (!empty($this->descriptionContent)) {
+        if (! empty($this->descriptionContent)) {
             $this->fields['description'] = [
                 'type' => 'doc',
                 'version' => 1,
