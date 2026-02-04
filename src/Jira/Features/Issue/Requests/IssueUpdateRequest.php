@@ -31,6 +31,14 @@ class IssueUpdateRequest extends IssueCreateRequest
     {
         $this->validate();
 
+        if (! empty($this->descriptionContent)) {
+            $this->fields['description'] = [
+                'type' => 'doc',
+                'version' => 1,
+                'content' => $this->descriptionContent,
+            ];
+        }
+
         return ['fields' => $this->fields];
     }
 }
