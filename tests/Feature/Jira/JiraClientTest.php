@@ -16,8 +16,7 @@ class JiraClientTest extends TestCase
         return new JiraClient($config);
     }
 
-    /** @test */
-    public function it_requires_base_url(): void
+    public function test_it_requires_base_url(): void
     {
         $this->expectException(JiraException::class);
         $this->expectExceptionMessage('Missing config: atlassian.jira.base_url');
@@ -25,8 +24,7 @@ class JiraClientTest extends TestCase
         $this->makeClient(['base_url' => null]);
     }
 
-    /** @test */
-    public function it_requires_email(): void
+    public function test_it_requires_email(): void
     {
         $this->expectException(JiraException::class);
         $this->expectExceptionMessage('Missing config: atlassian.jira.email');
@@ -34,8 +32,7 @@ class JiraClientTest extends TestCase
         $this->makeClient(['email' => null]);
     }
 
-    /** @test */
-    public function it_requires_api_token(): void
+    public function test_it_requires_api_token(): void
     {
         $this->expectException(JiraException::class);
         $this->expectExceptionMessage('Missing config: atlassian.jira.api_token');
@@ -43,8 +40,7 @@ class JiraClientTest extends TestCase
         $this->makeClient(['api_token' => null]);
     }
 
-    /** @test */
-    public function it_sends_get_requests_to_base_url_plus_endpoint(): void
+    public function test_it_sends_get_requests_to_base_url_plus_endpoint(): void
     {
         Http::fake([
             'https://test.atlassian.net/rest/api/3/myself' => Http::response(['accountId' => 'abc'], 200),
@@ -61,8 +57,7 @@ class JiraClientTest extends TestCase
         });
     }
 
-    /** @test */
-    public function it_throws_jira_exception_on_400_and_sets_context(): void
+    public function test_it_throws_jira_exception_on_400_and_sets_context()
     {
         Http::fake([
             'https://test.atlassian.net/rest/api/3/issue' => Http::response([
@@ -74,6 +69,7 @@ class JiraClientTest extends TestCase
         $client = $this->makeClient();
 
         try {
+
             $client->post('rest/api/3/issue', ['fields' => []]);
             $this->fail('Expected JiraException to be thrown.');
         } catch (JiraException $e) {
@@ -81,14 +77,15 @@ class JiraClientTest extends TestCase
             $this->assertSame('Project is invalid', $e->getMessage());
 
             $this->assertIsArray($e->context);
-            $this->assertSame('jira', $e->context['service'] ?? null);
-            $this->assertSame(400, $e->context['status'] ?? null);
+            $this->assertSame('jira', $e->context['service']);
+            $this->assertSame(400, $e->context['status']);
+            $this->assertStringContainsString('/rest/api/3/issue', $e->context['url']);
             $this->assertArrayHasKey('body', $e->context);
+            $this->assertArrayHasKey('errorMessages', $e->context['body']);
         }
     }
 
-    /** @test */
-    public function it_returns_empty_array_when_put_response_has_no_json(): void
+    public function test_it_returns_empty_array_when_put_response_has_no_json(): void
     {
         Http::fake([
             'https://test.atlassian.net/rest/api/3/issue/PROJ-1' => Http::response(null, 204),
