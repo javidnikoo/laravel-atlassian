@@ -17,40 +17,30 @@ class JiraClient implements JiraClientInterface
         $this->config = $config;
 
         if (empty($this->config['base_url'])) {
-            throw new JiraException('Missing config: atlassian.jira.base_url');
+            throw new JiraException(
+                'Missing config: atlassian.jira.base_url. '
+                .'Did you forget to set ATLASSIAN_JIRA_BASE_URL in your .env?'
+            );
         }
 
         if (empty($this->config['email'])) {
-            throw new JiraException('Missing config: atlassian.jira.email');
+            throw new JiraException(
+                'Missing config: atlassian.jira.email. '
+                .'Did you forget to set ATLASSIAN_JIRA_EMAIL in your .env?'
+            );
         }
 
         if (empty($this->config['api_token'])) {
-            throw new JiraException('Missing config: atlassian.jira.api_token');
+            throw new JiraException('Missing config: atlassian.jira.api_token. '
+                .'Did you forget to set ATLASSIAN_API_TOKEN in your .env?'
+            );
+
         }
     }
 
     protected function http(): PendingRequest
     {
-        return AtlassianHttpFactory::make($this->config)
-            ->throw(function ($response) {
-                $message = $response->json('errorMessages')[0]
-                    ?? $response->json('message')
-                    ?? $response->body()
-                    ?? 'Unknown error';
-
-                $status = $response->status();
-
-                throw new JiraException(
-                    message: $message,
-                    code: $status,
-                    context: [
-                        'service' => 'jira',
-                        'url' => $response->effectiveUri()?->__toString(),
-                        'status' => $status,
-                        'body' => $response->json() ?? $response->body(),
-                    ]
-                );
-            });
+        return AtlassianHttpFactory::make($this->config);
     }
 
     public function post(string $endpoint, array $data): array
