@@ -2,12 +2,13 @@
 
 namespace Javidnikoo\LaravelAtlassian\Jira\Features\Issue\Requests;
 
+use Javidnikoo\LaravelAtlassian\Jira\Enums\IssueType;
 use Javidnikoo\LaravelAtlassian\Jira\Exceptions\JiraException;
 
 class IssueCreateRequest
 {
     protected array $fields = [];
-
+    protected array $descriptionContent = [];
     public static function make(): static
     {
         return new static;
@@ -27,16 +28,131 @@ class IssueCreateRequest
         return $this;
     }
 
-    public function description(string $description): self
+    /**
+     * Add a simple paragraph of plain text
+     */
+    public function description(string $text): self
     {
-        $this->fields['description'] = $description;
+        $this->descriptionContent[] = [
+            'type' => 'paragraph',
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => $text,
+                ],
+            ],
+        ];
 
         return $this;
     }
 
-    public function issueType(string $type): self
+    /**
+     * Add multiple paragraphs at once
+     */
+    public function descriptionWithParagraphs(array $paragraphs): self
     {
-        $this->fields['issuetype'] = ['name' => $type];
+        foreach ($paragraphs as $text) {
+            $this->descriptionContent[] = [
+                'type' => 'paragraph',
+                'content' => [
+                    ['type' => 'text', 'text' => $text],
+                ],
+            ];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a horizontal divider (visual line / <hr>)
+     */
+    public function descriptionDivider(): self
+    {
+        $this->descriptionContent[] = [
+            'type' => 'rule',
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Add a quote block
+     */
+    public function descriptionQuote(string $text): self
+    {
+        $this->descriptionContent[] = [
+            'type' => 'blockquote',
+            'content' => [
+                [
+                    'type' => 'paragraph',
+                    'content' => [['type' => 'text', 'text' => $text]],
+                ],
+            ],
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Add an info panel (blue box)
+     */
+    public function descriptionInfoPanel(string $text): self
+    {
+        $this->descriptionContent[] = [
+            'type' => 'panel',
+            'attrs' => ['panelType' => 'info'],
+            'content' => [
+                [
+                    'type' => 'paragraph',
+                    'content' => [['type' => 'text', 'text' => $text]],
+                ],
+            ],
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Add a warning panel (yellow box)
+     */
+    public function descriptionWarningPanel(string $text): self
+    {
+        $this->descriptionContent[] = [
+            'type' => 'panel',
+            'attrs' => ['panelType' => 'warning'],
+            'content' => [
+                [
+                    'type' => 'paragraph',
+                    'content' => [['type' => 'text', 'text' => $text]],
+                ],
+            ],
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Add a success panel (green box) - bonus
+     */
+    public function descriptionSuccessPanel(string $text): self
+    {
+        $this->descriptionContent[] = [
+            'type' => 'panel',
+            'attrs' => ['panelType' => 'success'],
+            'content' => [
+                [
+                    'type' => 'paragraph',
+                    'content' => [['type' => 'text', 'text' => $text]],
+                ],
+            ],
+        ];
+
+        return $this;
+    }
+
+    public function issueType(IssueType|string $type): self
+    {
+        $this->fields['issuetype'] = ['name' => $type instanceof IssueType ? $type->value : $type];
 
         return $this;
     }
@@ -52,13 +168,29 @@ class IssueCreateRequest
     {
         $this->validate();
 
+        if (!empty($this->descriptionContent)) {
+            $this->fields['description'] = [
+                'type' => 'doc',
+                'version' => 1,
+                'content' => $this->descriptionContent,
+            ];
+        }
+
         return ['fields' => $this->fields];
     }
 
     protected function validate(): void
     {
-        if (empty($this->fields['project']) || empty($this->fields['summary']) || empty($this->fields['issuetype'])) {
-            throw new JiraException('Required fields missing.');
+        if (empty($this->fields['project']['key'])) {
+            throw new JiraException('Project key is required.');
+        }
+
+        if (empty($this->fields['summary'])) {
+            throw new JiraException('Summary is required.');
+        }
+
+        if (empty($this->fields['issuetype']['name'])) {
+            throw new JiraException('Issue type is required.');
         }
     }
 }
