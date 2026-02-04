@@ -88,7 +88,7 @@ class JiraClient implements JiraClientInterface
             $status = $response->status();
 
             $message = $response->json('errorMessages')[0]
-                ?? ($response->json('errors') ? $response->json('errors') : null)
+                ?? ($response->json('errors') ? implode(', ', $response->json('errors')) : null)
                 ?? $response->json('message')
                 ?? $response->body()
                 ?? 'Unknown Jira API error';
